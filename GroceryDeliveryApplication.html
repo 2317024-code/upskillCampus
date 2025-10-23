@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grocery Delivery - Crave it? Get it.</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #2ecc71;
+            --primary-dark: #27ae60;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --gray: #95a5a6;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header Styles */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            box-shadow: var(--shadow);
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+        }
+
+        .tagline {
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-item {
+            cursor: pointer;
+            padding: 8px 16px;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .nav-item:hover, .nav-item.active {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .cart-icon {
+            position: relative;
+            cursor: pointer;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--accent);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: url('https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80') no-repeat center center/cover;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            color: white;
+            text-align: center;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+        }
+
+        .hero h2 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .cta-button {
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+        }
+
+        .cta-button:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 3rem 0;
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--dark);
+            position: relative;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 80px;
+            height: 4px;
+            background-color: var(--primary);
+            margin: 10px auto;
+            border-radius: 2px;
+        }
+
+        /* Products Grid */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 25px;
+            margin-bottom: 3rem;
+        }
+
+        .product-card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .product-image {
+            height: 160px;
+            background-color: var(--light);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--gray);
+            font-size: 3rem;
+        }
+
+        .product-info {
+            padding: 15px;
+        }
+
+        .product-category {
+            color: var(--gray);
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            margin-bottom: 5px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .product-price {
+            color: var(--primary-dark);
+            font-weight: 700;
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+        }
+
+        .add-to-cart {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-weight: 500;
+        }
+
+        .add-to-cart:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Cart Section */
+        .cart-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+            display: none;
+        }
+
+        .cart-items {
+            margin-bottom: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--light);
+        }
+
+        .cart-item-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .cart-item-name {
+            font-weight: 500;
+        }
+
+        .cart-item-price {
+            color: var(--gray);
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quantity-btn {
+            background-color: var(--light);
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .remove-item {
+            color: var(--accent);
+            cursor: pointer;
+            margin-left: 15px;
+        }
+
+        .cart-total {
+            text-align: right;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 2px solid var(--light);
+        }
+
+        .checkout-btn {
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-top: 20px;
+            float: right;
+            transition: background-color 0.3s ease;
+        }
+
+        .checkout-btn:hover {
+            background-color: #2980b9;
+        }
+
+        /* Checkout Section */
+        .checkout-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+            display: none;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--light);
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        /* Dashboard Section */
+        .dashboard-section {
+            background-color: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: var(--shadow);
+            margin-bottom: 3rem;
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 25px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .stat-label {
+            font-size: 1rem;
+            opacity: 0.9;
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            
+            .cart-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+            
+            .cart-item-actions {
+                width: 100%;
+                display: flex;
+                justify-content: space-between;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <div class="logo-icon">🛒</div>
+                    <div>
+                        <h1>Grocery Delivery</h1>
+                        <div class="tagline">Crave it? Get it. Truck it.</div>
+                    </div>
+                </div>
+                <div class="nav-links">
+                    <div class="nav-item active" data-section="products">Products</div>
+                    <div class="nav-item" data-section="cart">
+                        <div class="cart-icon">
+                            🛍️ Cart
+                            <div class="cart-count">0</div>
+                        </div>
+                    </div>
+                    <div class="nav-item" data-section="dashboard">Dashboard</div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2>Fresh Groceries Delivered</h2>
+                <p>Get your favorite groceries delivered right to your doorstep. Fresh, fast, and reliable.</p>
+                <button class="cta-button" id="shop-now">Shop Now</button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="container">
+            <!-- Products Section -->
+            <section id="products-section">
+                <h2 class="section-title">Our Products</h2>
+                <div class="products-grid" id="products-grid">
+                    <!-- Products will be dynamically added here -->
+                </div>
+            </section>
+
+            <!-- Cart Section -->
+            <section class="cart-section" id="cart-section">
+                <h2 class="section-title">Your Cart</h2>
+                <div class="cart-items" id="cart-items">
+                    <!-- Cart items will be dynamically added here -->
+                </div>
+                <div class="cart-total">
+                    Total: ₹<span id="cart-total">0</span>
+                </div>
+                <button class="checkout-btn" id="checkout-btn">Proceed to Checkout</button>
+            </section>
+
+            <!-- Checkout Section -->
+            <section class="checkout-section" id="checkout-section">
+                <h2 class="section-title">Checkout</h2>
+                <form id="checkout-form">
+                    <div class="form-group">
+                        <label for="customer-name">Full Name</label>
+                        <input type="text" id="customer-name" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-address">Delivery Address</label>
+                        <textarea id="customer-address" class="form-control" rows="3" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="customer-phone">Phone Number</label>
+                        <input type="tel" id="customer-phone" class="form-control" required>
+                    </div>
+                    <div class="order-summary">
+                        <h3>Order Summary</h3>
+                        <div id="order-summary-items">
+                            <!-- Order items will be dynamically added here -->
+                        </div>
+                        <div class="cart-total">
+                            Total: ₹<span id="order-total">0</span>
+                        </div>
+                    </div>
+                    <button type="submit" class="checkout-btn">Place Order</button>
+                </form>
+            </section>
+
+            <!-- Dashboard Section -->
+            <section class="dashboard-section" id="dashboard-section">
+                <h2 class="section-title">Dashboard</h2>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-products">0</div>
+                        <div class="stat-label">Products Available</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="cart-items-count">0</div>
+                        <div class="stat-label">Items in Cart</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" id="total-orders">0</div>
+                        <div class="stat-label">Total Orders</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">₹<span id="total-revenue">0</span></div>
+                        <div class="stat-label">Total Revenue</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>Grocery Delivery Application &copy; 2023</p>
+                <p>Developed by: Abijin Suvedha A</p>
+                <p>You're a good friend. I'm so proud of you. I'm a good friend.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Product data
+        const products = [
+            { id: 1, name: "Rice 5kg Bag", price: 450.0, category: "Grains", icon: "🍚" },
+            { id: 2, name: "Wheat Flour 1kg", price: 65.0, category: "Grains", icon: "🌾" },
+            { id: 3, name: "Sugar 1kg", price: 50.0, category: "Essentials", icon: "🍬" },
+            { id: 4, name: "Milk 1L", price: 60.0, category: "Dairy", icon: "🥛" },
+            { id: 5, name: "Bread", price: 40.0, category: "Bakery", icon: "🍞" },
+            { id: 6, name: "Butter 500g", price: 250.0, category: "Dairy", icon: "🧈" },
+            { id: 7, name: "Apples 1kg", price: 180.0, category: "Fruits", icon: "🍎" },
+            { id: 8, name: "Bananas (Dozen)", price: 90.0, category: "Fruits", icon: "🍌" }
+        ];
+
+        // Cart data
+        let cart = [];
+        let orders = JSON.parse(localStorage.getItem('orders')) || [];
+
+        // DOM Elements
+        const productsGrid = document.getElementById('products-grid');
+        const cartItems = document.getElementById('cart-items');
+        const cartTotal = document.getElementById('cart-total');
+        const cartCount = document.querySelector('.cart-count');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const checkoutSection = document.getElementById('checkout-section');
+        const checkoutForm = document.getElementById('checkout-form');
+        const orderSummaryItems = document.getElementById('order-summary-items');
+        const orderTotal = document.getElementById('order-total');
+        const dashboardSection = document.getElementById('dashboard-section');
+        const navItems = document.querySelectorAll('.nav-item');
+        const sections = {
+            products: document.getElementById('products-section'),
+            cart: document.getElementById('cart-section'),
+            dashboard: document.getElementById('dashboard-section')
+        };
+
+        // Initialize the app
+        function init() {
+            renderProducts();
+            updateCart();
+            setupEventListeners();
+            showSection('products');
+        }
+
+        // Render products to the grid
+        function renderProducts() {
+            productsGrid.innerHTML = '';
+            products.forEach(product => {
+                const productCard = document.createElement('div');
+                productCard.className = 'product-card';
+                productCard.innerHTML = `
+                    <div class="product-image">${product.icon}</div>
+                    <div class="product-info">
+                        <div class="product-category">${product.category}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">₹${product.price}</div>
+                        <button class="add-to-cart" data-id="${product.id}">Add to Cart</button>
+                    </div>
+                `;
+                productsGrid.appendChild(productCard);
+            });
+        }
+
+        // Update cart UI
+        function updateCart() {
+            // Update cart items
+            cartItems.innerHTML = '';
+            let total = 0;
+            
+            if (cart.length === 0) {
+                cartItems.innerHTML = '<p>Your cart is empty</p>';
+            } else {
+                cart.forEach(item => {
+                    const product = products.find(p => p.id === item.id);
+                    const itemTotal = product.price * item.quantity;
+                    total += itemTotal;
+                    
+                    const cartItem = document.createElement('div');
+                    cartItem.className = 'cart-item';
+                    cartItem.innerHTML = `
+                        <div class="cart-item-info">
+                            <div>${product.icon}</div>
+                            <div>
+                                <div class="cart-item-name">${product.name}</div>
+                                <div class="cart-item-price">₹${product.price} each</div>
+                            </div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <div class="cart-item-quantity">
+                                <button class="quantity-btn decrease" data-id="${product.id}">-</button>
+                                <span>${item.quantity}</span>
+                                <button class="quantity-btn increase" data-id="${product.id}">+</button>
+                            </div>
+                            <div class="remove-item" data-id="${product.id}">Remove</div>
+                        </div>
+                    `;
+                    cartItems.appendChild(cartItem);
+                });
+            }
+            
+            // Update cart total and count
+            cartTotal.textContent = total.toFixed(2);
+            cartCount.textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            
+            // Update dashboard stats
+            updateDashboard();
+        }
+
+        // Update dashboard statistics
+        function updateDashboard() {
+            document.getElementById('total-products').textContent = products.length;
+            document.getElementById('cart-items-count').textContent = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('total-orders').textContent = orders.length;
+            
+            const revenue = orders.reduce((sum, order) => sum + order.total, 0);
+            document.getElementById('total-revenue').textContent = revenue.toFixed(2);
+        }
+
+        // Show specific section
+        function showSection(sectionName) {
+            // Hide all sections
+            Object.values(sections).forEach(section => {
+                if (section) section.style.display = 'none';
+            });
+            checkoutSection.style.display = 'none';
+            
+            // Remove active class from all nav items
+            navItems.forEach(item => item.classList.remove('active'));
+            
+            // Show selected section and set active nav item
+            if (sections[sectionName]) {
+                sections[sectionName].style.display = 'block';
+                document.querySelector(`[data-section="${sectionName}"]`).classList.add('active');
+            }
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            // Navigation
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    const section = item.getAttribute('data-section');
+                    showSection(section);
+                });
+            });
+            
+            // Shop Now button
+            document.getElementById('shop-now').addEventListener('click', () => {
+                showSection('products');
+            });
+            
+            // Add to cart buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('add-to-cart')) {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    addToCart(productId);
+                }
+            });
+            
+            // Cart quantity buttons
+            document.addEventListener('click', (e) => {
+                if (e.target.classList.contains('increase')) {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    changeQuantity(productId, 1);
+                } else if (e.target.classList.contains('decrease')) {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    changeQuantity(productId, -1);
+                } else if (e.target.classList.contains('remove-item')) {
+                    const productId = parseInt(e.target.getAttribute('data-id'));
+                    removeFromCart(productId);
+                }
+            });
+            
+            // Checkout button
+            checkoutBtn.addEventListener('click', () => {
+                if (cart.length === 0) {
+                    alert('Your cart is empty!');
+                    return;
+                }
+                
+                // Update order summary
+                orderSummaryItems.innerHTML = '';
+                let total = 0;
+                
+                cart.forEach(item => {
+                    const product = products.find(p => p.id === item.id);
+                    const itemTotal = product.price * item.quantity;
+                    total += itemTotal;
+                    
+                    const orderItem = document.createElement('div');
+                    orderItem.className = 'cart-item';
+                    orderItem.innerHTML = `
+                        <div class="cart-item-info">
+                            <div>${product.icon}</div>
+                            <div>
+                                <div class="cart-item-name">${product.name}</div>
+                                <div class="cart-item-price">₹${product.price} x ${item.quantity}</div>
+                            </div>
+                        </div>
+                        <div class="cart-item-price">₹${itemTotal.toFixed(2)}</div>
+                    `;
+                    orderSummaryItems.appendChild(orderItem);
+                });
+                
+                orderTotal.textContent = total.toFixed(2);
+                
+                // Show checkout section
+                sections.cart.style.display = 'none';
+                checkoutSection.style.display = 'block';
+            });
+            
+            // Checkout form submission
+            checkoutForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                
+                const name = document.getElementById('customer-name').value;
+                const address = document.getElementById('customer-address').value;
+                const phone = document.getElementById('customer-phone').value;
+                
+                // Calculate total
+                const total = cart.reduce((sum, item) => {
+                    const product = products.find(p => p.id === item.id);
+                    return sum + (product.price * item.quantity);
+                }, 0);
+                
+                // Create order
+                const order = {
+                    id: Date.now(),
+                    customer: { name, address, phone },
+                    items: [...cart],
+                    total: total,
+                    date: new Date().toLocaleString()
+                };
+                
+                // Save order
+                orders.push(order);
+                localStorage.setItem('orders', JSON.stringify(orders));
+                
+                // Clear cart
+                cart = [];
+                updateCart();
+                
+                // Show success message
+                alert(`Order placed successfully! Your total is ₹${total.toFixed(2)}`);
+                
+                // Reset form and show products
+                checkoutForm.reset();
+                showSection('products');
+            });
+        }
+
+        // Add product to cart
+        function addToCart(productId) {
+            const existingItem = cart.find(item => item.id === productId);
+            
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({ id: productId, quantity: 1 });
+            }
+            
+            updateCart();
+            
+            // Show cart section if not already visible
+            if (!sections.cart.style.display || sections.cart.style.display === 'none') {
+                showSection('cart');
+            }
+        }
+
+        // Change item quantity in cart
+        function changeQuantity(productId, change) {
+            const item = cart.find(item => item.id === productId);
+            
+            if (item) {
+                item.quantity += change;
+                
+                if (item.quantity <= 0) {
+                    removeFromCart(productId);
+                } else {
+                    updateCart();
+                }
+            }
+        }
+
+        // Remove item from cart
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateCart();
+        }
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>
